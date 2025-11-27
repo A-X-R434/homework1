@@ -75,8 +75,40 @@ if (isProduction) {
     res.sendFile(path.join(frontendBuildPath, 'index.html'));
   });
 } else {
-  // 开发环境：可选的静态文件服务
-  // app.use(express.static('public'));
+  // 开发环境：提供public目录的静态文件服务
+  const publicPath = path.join(__dirname, 'public');
+  const fs = require('fs');
+  
+  // 确保public目录存在
+  if (fs.existsSync(publicPath)) {
+    console.log(`提供静态文件服务: ${publicPath}`);
+    app.use(express.static(publicPath));
+    
+    // 所有非API路由都返回index.html，支持前端路由
+    app.get('*', (req, res, next) => {
+      // 如果请求路径以/api开头，继续下一个中间件
+      if (req.path.startsWith('/api')) {
+        return next();
+      }
+      
+      // 尝试直接提供静态文件
+      const staticFilePath = path.join(publicPath, req.path);
+      
+      if (fs.existsSync(staticFilePath) && !fs.lstatSync(staticFilePath).isDirectory()) {
+        return res.sendFile(staticFilePath);
+      }
+      
+      // 其他所有请求都返回index.html
+      const indexPath = path.join(publicPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        next(); // 如果index.html不存在，继续下一个中间件（通常是404）
+      }
+    });
+  } else {
+    console.log('public目录不存在，未提供静态文件服务');
+  }
 }
 
 // 错误处理中间件

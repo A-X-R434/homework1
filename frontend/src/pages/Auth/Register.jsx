@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +9,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +27,9 @@ const Register = () => {
     }
     
     try {
-      // Call register API
+      // Call register function from AuthContext
       setLoading(true);
-      await authAPI.register({ username, email, password });
+      await register(username, email, password);
       
       // Navigate to login page after successful registration
       navigate('/login');

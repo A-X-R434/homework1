@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +8,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,11 +16,8 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // Call login API
-      const response = await authAPI.login({ email, password });
-      
-      // Save token to local storage
-      localStorage.setItem('token', response.token);
+      // Call login function from AuthContext
+      await login(email, password);
       
       // Navigate to home page
       navigate('/');

@@ -25,13 +25,25 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // 注册函数
-  const register = async (userData) => {
+  const register = async (username, email, password) => {
     setLoading(true);
     setError(null);
     
     try {
+      const userData = { username, email, password };
       const response = await registerUser(userData);
+      
+      // 安全检查response和response.data
+      if (!response || !response.data) {
+        throw new Error('注册失败：无效的服务器响应');
+      }
+      
       const { token: newToken, user: newUser } = response.data;
+      
+      // 检查必要的数据字段
+      if (!newToken || !newUser) {
+        throw new Error('注册失败：缺少必要的认证信息');
+      }
       
       // 存储token和用户信息
       localStorage.setItem('token', newToken);
@@ -50,13 +62,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 登录函数
-  const login = async (credentials) => {
+  const login = async (email, password) => {
     setLoading(true);
     setError(null);
     
     try {
+      const credentials = { email, password };
       const response = await loginUser(credentials);
+      
+      // 安全检查response和response.data
+      if (!response || !response.data) {
+        throw new Error('登录失败：无效的服务器响应');
+      }
+      
       const { token: newToken, user: newUser } = response.data;
+      
+      // 检查必要的数据字段
+      if (!newToken || !newUser) {
+        throw new Error('登录失败：缺少必要的认证信息');
+      }
       
       // 存储token和用户信息
       localStorage.setItem('token', newToken);

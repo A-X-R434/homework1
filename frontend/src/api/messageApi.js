@@ -1,8 +1,8 @@
 import api from './axiosConfig';
 
-// 发送联系留言
+// 发送消息
 export const sendMessage = async (messageData) => {
-  return await api.post('/contact', messageData);
+  return await api.post('/api/messages', messageData);
 };
 
 export default {
