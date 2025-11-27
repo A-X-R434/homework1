@@ -1,151 +1,108 @@
 # 项目部署指南
 
-## 环境要求
+## GitHub 部署指南
 
-在部署项目前，请确保目标PC已安装以下软件：
+### 项目信息
+- **GitHub 用户名**: `A-X-R434`
+- **仓库名**: `homework1`
+- **远程仓库 URL**: `https://github.com/A-X-R434/homework1.git`
 
-- Node.js 14.x 或更高版本
-- npm 或 yarn 包管理器
-- MongoDB（本地安装或MongoDB Atlas账号）
+### 部署步骤
 
-## 安装步骤
+由于网络环境限制，自动化部署无法直接推送到 GitHub，请按照以下步骤手动完成部署：
 
-### 1. 克隆项目代码
+1. **打开命令提示符（CMD）**
 
-首先，将项目代码复制到目标PC上：
+2. **切换到项目目录**
+   ```cmd
+   cd C:\Users\anxir\Documents\trae_projects\homework
+   ```
 
-```bash
-# 如果使用Git克隆
-# git clone <repository-url>
-# cd <project-folder>
+3. **检查 Git 状态**
+   ```cmd
+   git status
+   ```
 
-# 或者直接复制项目文件夹到目标位置
-```
+4. **推送到 GitHub**（执行此命令会自动打开浏览器进行 GitHub 认证）
+   ```cmd
+   git push -u origin main
+   ```
 
-### 2. 配置环境变量
+5. **完成 GitHub 认证**
+   浏览器打开后，按照提示登录 GitHub 账号并授权访问您的仓库。
 
-进入后端目录，复制并配置环境变量文件：
+6. **验证部署**
+   认证成功后，代码将自动上传到 GitHub。您可以访问 `https://github.com/A-X-R434/homework1` 验证代码是否成功部署。
 
-```bash
-cd backend
-cp .env.example .env
-```
+### 本地运行指南
 
-编辑 `.env` 文件，设置以下关键配置：
+部署完成后，您可以在本地运行项目：
 
-```
-# 服务器配置
-PORT=5000
+1. **安装依赖**
+   ```cmd
+   npm install
+   ```
 
-# MongoDB连接URI（本地或Atlas）
-MONGO_URI=mongodb://localhost:27017/portfolio
-# 或使用MongoDB Atlas: mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
+2. **启动服务器**
+   ```cmd
+   start_production.bat
+   ```
 
-# JWT密钥（请使用强随机密钥）
-JWT_SECRET=your_secure_jwt_secret_key_please_change
+3. **访问应用**
+   打开浏览器访问 `http://localhost:5000`
 
-# 前端URL（生产环境中设置为本机IP或域名）
-FRONTEND_URL=http://localhost:5000
-```
+### 项目结构
 
-### 3. 安装依赖
+- **后端**: 提供 API 服务和数据处理
+- **前端**: React 单页应用
+- **数据库模型**: MongoDB 数据结构定义
+- **API 路由**: RESTful API 接口定义
 
-#### 安装后端依赖：
+### 注意事项
 
-```bash
-cd backend
-npm install
-```
+- 请确保已配置好 `.env` 文件（参考 `.env.example`）
+- 项目需要 MongoDB 数据库支持
+- 前端构建文件位于 `frontend/dist` 目录
 
-#### 安装前端依赖（可选，如需要重新构建）：
+### 环境配置说明
 
-```bash
-cd ../frontend
-npm install
-```
+如需在本地开发或自定义配置，请参考以下步骤：
 
-### 4. 构建前端项目（如果需要）
+1. **配置环境变量**
+   复制 `.env.example` 文件创建 `.env` 文件：
+   ```cmd
+   cd backend
+   copy .env.example .env
+   ```
 
-如果前端代码未预构建，或需要更新：
+2. **编辑 `.env` 文件**，设置关键配置：
+   ```
+   # 服务器配置
+   PORT=5000
+   
+   # MongoDB连接URI
+   MONGO_URI=mongodb://localhost:27017/portfolio
+   
+   # JWT密钥
+   JWT_SECRET=your_secure_jwt_secret_key_please_change
+   
+   # 前端URL
+   FRONTEND_URL=http://localhost:5000
+   ```
 
-```bash
-cd frontend
-npm run build
-```
+3. **如需重新构建前端**：
+   ```cmd
+   cd frontend
+   npm install
+   npm run build
+   ```
 
-这将生成 `dist` 目录，包含前端生产环境文件。
+## 故障排除
 
-## 启动项目
+如果在部署或运行过程中遇到问题：
 
-### 开发模式启动（用于调试）
+1. **Git 认证失败**：确保已登录 GitHub 并授权访问
+2. **数据库连接问题**：检查 MongoDB 服务是否已启动
+3. **端口占用**：如端口 5000 被占用，可在 `.env` 文件中修改 PORT 值
 
-1. 启动后端：
-
-```bash
-cd backend
-npm run dev
-```
-
-2. 启动前端（在新终端）：
-
-```bash
-cd frontend
-npm run dev
-```
-
-### 生产模式启动（推荐部署方式）
-
-后端服务器将同时提供API和前端静态文件服务：
-
-```bash
-cd backend
-npm run start:prod
-```
-
-## 访问应用
-
-- **生产模式**：打开浏览器访问 `http://localhost:5000` 或 `http://<your-ip>:5000`
-- **开发模式**：后端API在 `http://localhost:5000/api`，前端在 `http://localhost:5173`
-
-## 跨PC访问设置
-
-要允许其他PC访问此应用，请执行以下操作：
-
-1. 确保您的防火墙允许Node.js访问端口5000
-
-2. 修改后端 `.env` 文件中的 `FRONTEND_URL` 为您的本机IP地址：
-
-```
-FRONTEND_URL=http://<your-ip>:5000
-```
-
-3. 使用生产模式启动服务器：
-
-```bash
-npm run start:prod
-```
-
-4. 在其他PC上，使用浏览器访问：
-
-```
-http://<your-ip>:5000
-```
-
-## 常见问题排查
-
-1. **端口被占用**：修改 `.env` 文件中的 `PORT` 为其他端口
-2. **数据库连接失败**：检查 `MONGO_URI` 是否正确，MongoDB服务是否运行
-3. **跨域错误**：确保 `FRONTEND_URL` 配置正确
-4. **权限问题**：确保Node.js有读写文件的权限
-
-## 项目结构说明
-
-- `/frontend/dist` - 前端构建文件
-- `/backend` - 后端API服务
-- `/backend/server.js` - 主服务器文件，配置了生产环境静态文件服务
-
-## 注意事项
-
-- 生产环境中，请务必使用强密码和密钥
-- 定期备份数据库
-- 考虑使用PM2等进程管理工具确保服务稳定运行
+祝您部署顺利！
