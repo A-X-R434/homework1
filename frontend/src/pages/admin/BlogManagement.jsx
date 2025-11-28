@@ -257,7 +257,7 @@ const BlogManagement = () => {
               <div key={post._id} className="blog-card">
                 <h3>{post.title}</h3>
                 <p className="meta">
-                  作者: {post.author?.username || '未知作者'}
+                  作者: {post.author && typeof post.author === 'object' && post.author.username ? post.author.username : '未知作者'}
                   <span className="date">发布时间: {formatDate(post.createdAt)}</span>
                 </p>
                 <p className="excerpt">

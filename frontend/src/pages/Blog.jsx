@@ -66,9 +66,14 @@ const Blog = () => {
         
         {blogPosts.length > 0 ? (
           <div className="blog-posts-grid">
-            {blogPosts.map(post => (
-              <BlogPostCard key={post._id} post={post} />
-            ))}
+            {blogPosts.map(post => {
+              // 确保post和post.author是有效的对象
+              const safePost = {
+                ...post,
+                author: post.author && typeof post.author === 'object' ? post.author : { username: '未知作者' }
+              };
+              return <BlogPostCard key={post._id} post={safePost} />;
+            })}
           </div>
         ) : (
           <div className="no-posts">

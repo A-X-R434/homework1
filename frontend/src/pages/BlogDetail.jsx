@@ -150,7 +150,7 @@ const BlogDetail = () => {
               blogPost.comments.map(comment => (
                 <div key={comment._id} className="comment">
                   <div className="comment-header">
-                    <span className="comment-author">{comment.author?.username}</span>
+                    <span className="comment-author">{comment.author && typeof comment.author === 'object' && comment.author.username ? comment.author.username : '匿名用户'}</span>
                     <span className="comment-date">{formatDate(comment.createdAt)}</span>
                   </div>
                   <div className="comment-body">

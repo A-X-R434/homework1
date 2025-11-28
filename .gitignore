@@ -11,6 +11,9 @@ dist/
 dist-ssr/
 *.local
 
+# 但是允许前端构建目录
+!frontend/dist/
+
 # 环境变量文件
 .env
 .env.local

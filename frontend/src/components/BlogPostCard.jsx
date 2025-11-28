@@ -27,7 +27,7 @@ const BlogPostCard = ({ post }) => {
           <Link to={`/blog/${_id}`}>{title}</Link>
         </h3>
         <div className="blog-post-meta">
-          <span className="author">作者: {author?.username || '未知作者'}</span>
+          <span className="author">作者: {author && typeof author === 'object' && author.username ? author.username : '未知作者'}</span>
           <span className="date">发布时间: {formatDate(createdAt)}</span>
         </div>
       </div>

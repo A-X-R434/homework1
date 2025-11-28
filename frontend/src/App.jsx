@@ -2,6 +2,7 @@ import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-r
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useAuth } from './context/AuthContext';
 import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -11,7 +12,7 @@ import './App.css';
 
 function App() {
   const location = useLocation();
-  const isLoggedIn = localStorage.getItem('token');
+  const { isAuthenticated, logout } = useAuth();
   const nodeRef = useRef(null);
 
   // Navbar component
@@ -43,18 +44,15 @@ function App() {
         )}
         <div className="logo">
           <Link to="/">Project Management System</Link>
+          
         </div>
       <div className="nav-links">
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <Link to="/">Home</Link>
             <Link to="/projects">Projects</Link>
             <Link to="/blog">Blog</Link>
-            <button onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
-              window.location.href = '/';
-            }}>Logout</button>
+            <button onClick={logout}>Logout</button>
           </>
         ) : (
           <>
@@ -69,6 +67,7 @@ function App() {
 
   return (
     <div className="app">
+      <div className="system-header">Wanghan's Project Management System</div>
       <Navbar />
       <div className="main-content">
         <TransitionGroup>
@@ -84,10 +83,10 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/projects" element={
-                isLoggedIn ? <Projects /> : <Navigate to="/login" replace />}
+                isAuthenticated ? <Projects /> : <Navigate to="/login" replace />}
               />
               <Route path="/blog" element={
-                isLoggedIn ? <Blog /> : <Navigate to="/login" replace />}
+                isAuthenticated ? <Blog /> : <Navigate to="/login" replace />}
               />
               <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

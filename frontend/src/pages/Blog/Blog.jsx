@@ -166,14 +166,14 @@ const Blog = () => {
         ) : (
           <div className="posts-container">
             {posts.map(post => (
-              <div key={post.id} className="post-card">
+              <div key={post.id || post._id} className="post-card">
               <div className="post-header">
                 <h3>{post.title}</h3>
                 <span className="category-tag">{post.category}</span>
               </div>
               <p className="post-content">{post.content.substring(0, 100)}...</p>
               <div className="post-meta">
-                <span className="author">Author: {post.author || 'Admin'}</span>
+                <span className="author">Author: {post.author && typeof post.author === 'object' && post.author.username ? post.author.username : '未知作者'}</span>
                 <span className="date">Published: {post.date || new Date(post.createdAt).toLocaleString()}</span>
               </div>
               {post.tags && post.tags.length > 0 && (

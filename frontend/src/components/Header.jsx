@@ -38,7 +38,7 @@ const Header = () => {
               ) : (
                 // 登录状态：显示用户信息/管理员后台/退出
                 <div className="auth-user-menu">
-                  <span className="user-greeting">欢迎, {user?.username}</span>
+                  <span className="user-greeting">欢迎, {user && user.username ? user.username : '用户'}</span>
                   <li><Link to="/admin">管理员后台</Link></li>
                   <li><button onClick={handleLogout} className="logout-btn">退出</button></li>
                 </div>
